@@ -26,5 +26,13 @@ pipeline {
                 bat 'mvn checkstyle:check'
             }
         }
+        stage("Test Coverage") {
+            bat 'mvn verify'
+            post {
+                always {
+                    archiveArtifacts "agg/target/site/**"
+                }
+            }
+        }
     }
 }
