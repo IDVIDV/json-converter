@@ -3,6 +3,8 @@ import Serialization.Serializer;
 import Example.Cat;
 import Example.Gender;
 
+// Разработать сериализатор/десериализатор POJO в JSON с помощью АОП
+
 public class Demonstration {
     public static void main(String[] args) {
         Cat cat = new Cat("Матроскин", 10, Gender.MALE, null, false);
