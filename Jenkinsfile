@@ -27,10 +27,39 @@ pipeline {
             }
         }
         stage("Test Coverage") {
-            bat 'mvn verify'
+            steps{
+                bat 'mvn verify'
+            }
             post {
                 always {
                     archiveArtifacts "agg/target/site/**"
+                }
+            }
+        }
+        stage("Install"){
+            steps{
+                bat 'mvn install'
+            }
+        }
+        stage("Quality Gate"){
+            steps{
+                script{
+                    def file = readFile('agg/target/site/jacoco-aggregate/index.html')
+                    def regexMatch = file =~ "<td class=\"ctr2\">(\\d+)%</td>"
+                    def coverage = regexMatch[0][1] as int
+                    if (coverage < 60) {
+                        error "Quality Gate Failed"
+                    }
+                }
+            }
+        }
+        stage("Assembly"){
+            steps{
+                echo "Saving jar in Artifacts"
+            }
+            post {
+                always{
+                    archiveArtifacts "agg/target/*.jar"
                 }
             }
         }
