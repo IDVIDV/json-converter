@@ -15,7 +15,7 @@ pipeline {
             }
         }
         stage('Test Feature') {
-            when { branch pattern: "feature/.*", comparator: "REGEXP"}
+            when { expression {env.GIT_BRANCH =~ '/(feature)/'}}
             steps{
                 bat 'mvn test'
             }
