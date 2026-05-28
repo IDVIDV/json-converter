@@ -15,7 +15,6 @@ pipeline {
             when { branch pattern: "feature*", comparator: "REGEXP"}
             steps{
                 bat 'mvn test'
-
             }
         }
     }
