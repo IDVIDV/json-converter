@@ -11,5 +11,11 @@ pipeline {
                 bat 'mvn clean compile'
             }
         }
+        stage('Test Feature') {
+            when { branch pattern: "feature*", comparator: "REGEXP"}
+            steps{
+                bat 'mvn test'
+            }
+        }
     }
 }
