@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        maven 'mvn'
+        maven 'maven-3.9.16'
     }
     stages {
         stage('Checkout'){
@@ -11,13 +11,13 @@ pipeline {
         }
         stage('Compile'){
             steps {
-                bat '${mvnHome}/bin/mvnw clean compile'
+                bat 'mvn clean compile'
             }
         }
         stage('Test Feature') {
             when { branch pattern: "feature/.*", comparator: "REGEXP"}
             steps{
-                bat '${mvnHome}/bin/mvnw test'
+                bat 'mvn test'
             }
         }
     }
