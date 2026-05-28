@@ -25,5 +25,19 @@ public class Demonstration {
 
         System.out.println("Десериализованный объект совпадает с изначальным?");
         System.out.println(cat.equals(deserializedCat));
+
+        Cat cat2 = new Cat("Мурка", 15, Gender.FEMALE, null, true);
+        String jsonString2 = serializer.serialize(cat2);
+
+        System.out.println("Объект в формате JSON:");
+        System.out.println(jsonString2);
+
+        Cat deserializedCat2 = (Cat) deserializer.deserializeObj(Cat.class, jsonString2);
+        jsonString = serializer.serialize(deserializedCat2);
+        System.out.println("Десериализованный объект в формате JSON:");
+        System.out.println(jsonString2);
+
+        System.out.println("Десериализованный объект совпадает с изначальным?");
+        System.out.println(cat2.equals(deserializedCat2));
     }
 }
