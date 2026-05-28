@@ -2,11 +2,16 @@ package Example.Serialization;
 
 import Example.Exceptions.DeserializeException;
 import Example.Util.EscSymbDeserializer;
+import Example.Util.FileReader;
 import Example.Util.WrappedPrimitiveUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,20 +26,40 @@ import java.util.TreeSet;
 
 public class Deserializer {
 
+    private static final Logger LOGGER = LogManager.getLogger();
+
     //Мап для восстановления типов полей-коллекций (коллекции могут быть вложенными)
     private final Map<String, List<Class>> fieldInnerTypes;
+    private final FileReader fileReader;
 
     public Deserializer(Map<String, List<Class>> collFieldTypes) {
         this.fieldInnerTypes = collFieldTypes;
+        this.fileReader = new FileReader();
     }
 
     public Deserializer() {
         this.fieldInnerTypes = Collections.EMPTY_MAP;
+        this.fileReader = new FileReader();
+    }
+
+    public Deserializer(FileReader fileReader) {
+        this.fieldInnerTypes = Collections.EMPTY_MAP;
+        this.fileReader = fileReader;
+    }
+
+    public Object deserializeObjFile(Class objType, Path file) {
+        try {
+            return deserializeObj(objType, fileReader.readFile(file));
+        } catch (IOException e) {
+            LOGGER.error("Failed to read from file", e);
+        }
+
+        return null;
     }
 
     //Десериализовать объект
     public Object deserializeObj(Class objType, String jsonString) {
-        if (objType.isPrimitive() || WrappedPrimitiveUtils.isWrappedPrimitive(objType) || objType.isArray()
+        if (objType == null || objType.isPrimitive() || WrappedPrimitiveUtils.isWrappedPrimitive(objType) || objType.isArray()
                 || objType.isEnum() || objType == String.class || Collection.class.isAssignableFrom(objType)) {
             throw new DeserializeException("Попытка десериализации неправильного типа");
         }
