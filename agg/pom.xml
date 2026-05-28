@@ -42,7 +42,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>Example.Demonstration</mainClass>
+              <mainClass>example.Demonstration</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>

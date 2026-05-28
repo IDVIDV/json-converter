@@ -20,5 +20,11 @@ pipeline {
                 bat 'mvn test'
             }
         }
+        stage("Checkstyle Develop") {
+            when { expression {env.GIT_BRANCH = 'develop'}}
+            steps{
+                bat 'mvn checkstyle:check'
+            }
+        }
     }
 }
