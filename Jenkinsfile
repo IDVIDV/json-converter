@@ -8,13 +8,13 @@ pipeline {
         }
         stage('Compile'){
             steps {
-                bat 'mvn clean compile'
+                bat '.\mvnw clean compile'
             }
         }
         stage('Test Feature') {
-            when { branch pattern: "feature*", comparator: "REGEXP"}
+            when { branch pattern: "feature/.*", comparator: "REGEXP"}
             steps{
-                bat 'mvn test'
+                bat '.\mvnw test'
             }
         }
     }
