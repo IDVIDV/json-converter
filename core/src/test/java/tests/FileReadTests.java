@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FileReadTests {
@@ -45,11 +45,12 @@ public class FileReadTests {
         var result = deserializer.deserializeObjFile(Cat.class, Path.of("RND"));
 
         // assert
+        verify(fileReader, times(1)).readFile(any());
         Assertions.assertNull(result);
     }
 
     @Test
-    public void returnsNotNull_whenFileReadFails() throws IOException {
+    public void returnsNotNull_whenFileReadSucceeds() throws IOException {
         // arrange
         Cat cat = new Cat();
         when(fileReader.readFile(eq(Path.of("RND")))).thenReturn("RNDSTR");
@@ -59,6 +60,7 @@ public class FileReadTests {
         var result = deserializer.deserializeObjFile(Cat.class, Path.of("RND"));
 
         // assert
+        verify(fileReader, times(1)).readFile(any());
         Assertions.assertNotNull(result);
     }
 }
